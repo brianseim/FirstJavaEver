@@ -13,8 +13,8 @@ public class Test {
 
     public static void main(String[] args) throws Exception {
         NotesList notesRepo = new NotesList();
-        notesRepo.AddNote("hello world");
-        notesRepo.AddNote("goodbye world");
+        notesRepo.add("hello world");
+        notesRepo.add("goodbye world");
 
         HttpServer server = HttpServer.create(new InetSocketAddress(80), 0);
         server.createContext("/api", new MyApiRootHandler());
@@ -59,17 +59,21 @@ public class Test {
                 isr.close();
                 Note note = gson.fromJson(buf.toString(), Note.class);
 
-                note = notes.AddNote(note.body);
+                note = notes.add(note.body);
                 response = gson.toJson(note);
             } else {
                 String url = t.getRequestURI().toString();
                 String[] xx = url.split("/");
                 if (xx.length == 4) {
                     int id = Integer.parseInt(xx[xx.length - 1]);
-                    response = this.notes.NoteJsonOut(id);
-                    if (response.length() == 0) responseCode = 404;
+                    try {
+                        response = gson.toJson(this.notes.get(id));
+                    } catch (Exception e){
+                        response = "note not found";
+                        responseCode = 404;
+                    }
                 } else {
-                    response = notes.JsonOut();
+                    response = gson.toJson(notes.get());
                 }
             }
             t.sendResponseHeaders(responseCode, response.getBytes("UTF-8").length);
