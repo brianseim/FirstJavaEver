@@ -1,11 +1,13 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 class NotesList {
     private HashMap<Integer, Note> notes = new HashMap<>(); // Consider SparseArray??
     private int nextId;
 
-    public NotesList(){
+    NotesList(){
         this.nextId = 1;
     }
 
@@ -16,16 +18,40 @@ class NotesList {
         return newNote;
     }
 
+    public Note update(Note note) throws Exception{
+        if(notes.containsKey(note.id)) {
+            notes.put(note.id, note);
+            return note;
+        }
+        throw new Exception("Exception Thrown - note not found");
+    }
+
+    public Note delete(int noteId) throws Exception{
+        Note deleteNote = this.get(noteId);
+        // not found exception may be encountered above
+        notes.remove(noteId);
+        return deleteNote;
+    }
+
     public Note get(int noteId) throws Exception {
         if (notes.containsKey(noteId)) {
-            Note note = notes.get(noteId);
-            return note;
+            return notes.get(noteId);
         }
         throw new Exception("Exception Thrown - note not found");
     }
 
     public Note[] get(){
         return notes.values().toArray(new Note[0]);
+    }
+
+    public Note[] getFiltered(String txt){
+        // https://stackoverflow.com/questions/11160382/java-map-filter-with-values-properties
+        // https://www.mkyong.com/java8/java-8-filter-a-map-examples/
+        Map<Integer, Note> filtered = notes.entrySet().stream()
+                .filter(map -> map.getValue().body.contains(txt))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+        return filtered.values().toArray(new Note[0]);
     }
 
 //    public String JsonOut(){
