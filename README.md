@@ -9,7 +9,8 @@ improvement on the URI/URL handling and there is definitely a library or framewo
 Additionally looking for some guidance and feedback on file organization and frameworks that are common
 at Levels Beyond.
 
-I coded this example in JetBrains IntelliJ IDEA and that is the best way to run it. this folder
+I coded this example in JetBrains IntelliJ IDEA and, for me, that is the best way to run it as I'm 
+new to teh compiling etc. This folder
 contains the "production" code:
 ```
 /out/production/javaSimpleServer
