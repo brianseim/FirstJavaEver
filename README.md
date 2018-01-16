@@ -61,7 +61,7 @@ Returns: an updated note...
 
 Example
 ```
-curl -i -H "Content-Type: application/json" -X PUT -d '{"id: 3, "body" : "Pick up milk! NOW!"}' http://localhost/api/notes
+curl -i -H "Content-Type: application/json" -X PUT -d '{"id": 3, "body" : "Pick up milk! NOW!"}' http://localhost/api/notes
 ```
 Returns:
 ```json
@@ -71,9 +71,10 @@ Returns:
 }
 ```
 ## Delete an Existing Note
-When I DELETE a note JSON to the notes route, an existing note will be deleted.
+When I DELETE a note JSON to the notes route, an existing note with the corresponding ID
+ at the end of the URL will be deleted.
 ```
-DELETE /api/notes/1
+DELETE /api/notes/3
 
 Returns: the deleted note...
 ```
