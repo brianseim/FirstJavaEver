@@ -1,7 +1,10 @@
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 
+import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
@@ -41,9 +44,23 @@ public class Test {
         public void handle(HttpExchange t) throws IOException {
             String response;
             int responseCode = 200;
-            if(t.getRequestMethod().equals("POST")) {
+            Gson gson = new Gson();
 
-                response = "POST";
+            if(t.getRequestMethod().equals("POST")) {
+                InputStreamReader isr = new InputStreamReader(t.getRequestBody(),"utf-8");
+                BufferedReader br = new BufferedReader(isr);
+                int b;
+                StringBuilder buf = new StringBuilder(512);
+                while ((b = br.read()) != -1) {
+                    buf.append((char) b);
+                }
+
+                br.close();
+                isr.close();
+                Note note = gson.fromJson(buf.toString(), Note.class);
+
+                note = notes.AddNote(note.body);
+                response = gson.toJson(note);
             } else {
                 String url = t.getRequestURI().toString();
                 String[] xx = url.split("/");
@@ -60,5 +77,6 @@ public class Test {
             os.write(response.getBytes());
             os.close();
         }
+
     }
 }

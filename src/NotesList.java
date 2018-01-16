@@ -9,10 +9,11 @@ class NotesList {
         this.nextId = 1;
     }
 
-    public void AddNote(String noteText){
+    public Note AddNote(String noteText){
         notes.put(nextId, noteText);
+        Note newNote = new Note(nextId, noteText);
         nextId++;
-        return;
+        return newNote;
     }
 
     public String JsonOut(){
